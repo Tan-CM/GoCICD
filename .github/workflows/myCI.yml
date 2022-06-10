@@ -88,4 +88,4 @@ jobs: # job to execute?
       with:
         to: ${{ secrets.TELEGRAM_ID }}        # Secret Repository
         token: ${{ secrets.TELEGRAM_TOKEN }}  # Secret Repository
-        message: Send message for Notification.
+  
