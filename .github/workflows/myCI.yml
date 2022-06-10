@@ -30,7 +30,7 @@ jobs: # job to execute?
       
     - name: Install dependencies
       run: |
-        go mod init calc   # if we use 'go build', can remove go mo init, go mod tidy and go get
+        go mod init calc   # if we use 'go build' with go.sum and go.mod, can remove go mo init, go mod tidy and go get
         go mod tidy
         go get github.com/franela/goblin
         go test -v
