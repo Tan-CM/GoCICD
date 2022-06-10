@@ -81,5 +81,10 @@ jobs: # job to execute?
         assignees: ${{github.actor}}
         labels: worflow-failed
         body: Workflow failed for commit ${{github.sha}}
-      
-    
+     
+    # send message to telegram 
+    - name: send default message
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_ID }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
