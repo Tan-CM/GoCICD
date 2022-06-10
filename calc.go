@@ -2,6 +2,7 @@ package calc
 
 import "fmt"
 
+// Added just to clear error from CD
 func main() {
 	fmt.Println("Calc")
 }
