@@ -1,4 +1,8 @@
 package calc
+import "fmt"
+func main() {
+	fmt.Println("Calc")
+}
 
 // Add two numbers and return the result.
 func Add(val1, val2 int) int {
