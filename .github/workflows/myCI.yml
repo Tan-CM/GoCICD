@@ -1,33 +1,46 @@
 name: CI for Go Code #Naming the workflow
+
+#control when work flow will run
 on: #for event triggering
   push:
     branches: [main]  #add commas for more branches to monitor
   pull_request:
     branches: [main]
-    
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs: # job to execute?
   build: # name of the job
     name: Load OS # name for printing
     runs-on: ubuntu-latest  # specify OS in virtual machine
-    steps: 
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    
+    # Runs a set of commands using the runners shell
     - name: Print hello
       run: |  # run terminal commands
         ls
         echo Hello!!
         
+    # Setup go environment     
     - name: Setup Go
       uses: actions/setup-go@v3.2.0
       with:
         go-version: 1.18
+        
+    # Check go version
     - name: Check Go Version
       run: go version
-      
+    
+    # checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - name: Checkout Repo
       uses: actions/checkout@v2.4.2
-      
+    
+    # list files in repository
     - name: Check File System
       run: ls
-      
+    
+    # check-out a private repository
     - name: Checkout Remote Private Repo
       uses: actions/checkout@v2.4.2
       with:
@@ -40,7 +53,8 @@ jobs: # job to execute?
         ls
         cat myText.txt
         cd ..
-      
+    
+    # install dependencies
     - name: Install dependencies
       run: |
         go build  #if you do not have mod and sum in the repo, go build alone won't work. or you can use go mod init <name>, go get github.com/franela/goblin and go mod tidy
@@ -50,12 +64,14 @@ jobs: # job to execute?
         go test -v
         go test -v | go2xunit -output tests.xml   # convert to xml
         
+    # Publish Test Result which requires a *.xml    
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v1
-      if: always()      # previous action regardless
+      if: always()      # runs regardless of the result of earlier jobs
       with:
         files: "tests.xml"
-      
+    
+    # if test fails, create an issue to github actor
     - if:  ${{ failure() }}
       uses: nashmaniac/create-issue-action@v1.1
       name: Create Issue Action
