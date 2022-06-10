@@ -48,7 +48,7 @@ jobs: # job to execute?
         go get github.com/franela/goblin
         go get github.com/tebeka/go2xunit
         go test -v
-        go test -v | go2xunit -output tests.xml   # convert to xml
+        go test -v | go2xunit -output > tests.xml   # convert to xml
         
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v1
