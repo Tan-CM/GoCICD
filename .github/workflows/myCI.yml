@@ -46,9 +46,9 @@ jobs: # job to execute?
         go mod init calc   # if we use 'go build' with go.sum and go.mod, can remove go mo init, go mod tidy and go get
         go mod tidy
         go get github.com/franela/goblin
-        go get github.com/tebeka/go2xunit
+        go install github.com/tebeka/go2xunit@latest
         go test -v
-        go test -v | go2xunit -output > tests.xml   # convert to xml
+        go test -v | go2xunit -output tests.xml   # convert to xml
         
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v1
