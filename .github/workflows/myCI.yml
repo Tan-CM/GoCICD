@@ -25,6 +25,9 @@ jobs: # job to execute?
     - name: Checkout Repo
       uses: actions/checkout@v2.4.2
       
+    - name: Check File System
+      run: ls
+      
     - name: Checkout Remote Private Repo
       uses: actions/checkout@v2.4.2
       with:
@@ -37,9 +40,6 @@ jobs: # job to execute?
         ls
         cat myText.txt
         cd ..
-         
-    - name: Check File System
-      run: ls
       
     - name: Install dependencies
       run: |
