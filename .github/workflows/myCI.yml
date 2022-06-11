@@ -1,24 +1,25 @@
 name: CI for Go Code #Naming the workflow
 
 #control when work flow will run
-on: #for event triggering
+on: #for event triggering, with multiple events
   push:
-    branches: [main]  #add commas for more branches to monitor
+    branches: [main]  # fliter list with one item main, add commas for more branches to monitor
   pull_request:
     branches: [main]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs: # job to execute?
-  build: # name of the job
+  build: # job name (job_id)
     name: Load OS # name for printing
     runs-on: ubuntu-latest  # specify OS in virtual machine
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+    # steps: with - specifies as a multiline list for every - *
     
     # Runs a set of commands using the runners shell
     - name: Print hello
-      run: |  # run terminal commands
+      run: |  # | YAML interpret as a literal block for characters following
         ls
         echo Hello!!
         
@@ -38,8 +39,10 @@ jobs: # job to execute?
     
     # list files in repository
     - name: Check File System
-      run: ls
-    
+      run: |
+        echo "The Operating System on the runner is $env:RUNNER_OS."
+        ls
+        
     # check-out a private repository
     - name: Checkout Remote Private Repo
       uses: actions/checkout@v2.4.2
@@ -47,8 +50,10 @@ jobs: # job to execute?
          repository: lowkh2/GoSchoolRemoteExample
          token: ${{ secrets.GO_SECRET }}
          path: remote
+         
+    # display remote file
     - name: Check remote files
-      run: |
+      run: |        # | YAML interpret as a literal block for characters following
         cd remote
         ls
         cat myText.txt
@@ -56,7 +61,7 @@ jobs: # job to execute?
     
     # install dependencies
     - name: Install dependencies
-      run: |
+      run: |       # | YAML interpret as a block for characters following
         go build  #if you do not have mod and sum in the repo, go build alone won't work. or you can use go mod init <name>, go get github.com/franela/goblin and go mod tidy
         # go mod tidy
         # go get github.com/franela/goblin
@@ -67,11 +72,11 @@ jobs: # job to execute?
     # Publish Test Result which requires a *.xml    
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v1
-      if: always()      # runs regardless of the result of earlier jobs
+      if: always()   # if default is success(), so always() run regardless result of earlier steps
       with:
         files: "tests.xml"
     
-    # if test fails, create an issue to github actor
+    # if previous step test fails, create an issue to github actor
     - if:  ${{ failure() }}
       uses: nashmaniac/create-issue-action@v1.1
       name: Create Issue Action
@@ -86,6 +91,12 @@ jobs: # job to execute?
     - name: send default message
       uses: appleboy/telegram-action@master
       with:
-        to: ${{ secrets.TELEGRAM_ID }}        # Secret Repository
-        token: ${{ secrets.TELEGRAM_TOKEN }}  # Secret Repository
-  
+        to: ${{ secrets.TELEGRAM_ID }}        # Secret in Repository secret
+        token: ${{ secrets.TELEGRAM_TOKEN }}  # Secret in Repository secret
+        message: |
+          ${{ github.actor }} created commit:
+          Commit message: ${{ github.event.commits[0].message }}
+          
+          Repository: ${{ github.repository }}
+            
+          See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}} 
