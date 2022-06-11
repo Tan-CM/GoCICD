@@ -11,7 +11,7 @@ on: #for event triggering, with multiple events
 jobs: # job to execute?
   build: # job name (job_id)
     name: Load OS # name for printing
-    runs-on: ubuntu-latest  # specify OS in virtual machine
+    runs-on: ubuntu-latest  # specify OS in virtual machine on Runner
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -23,7 +23,7 @@ jobs: # job to execute?
         ls
         echo Hello!!
         
-    # Setup go environment     
+    # Setup go environment to Runner     
     - name: Setup Go
       uses: actions/setup-go@v3.2.0
       with:
