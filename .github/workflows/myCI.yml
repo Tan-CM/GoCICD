@@ -35,7 +35,7 @@ jobs: # job to execute?
     
     # checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - name: Checkout Repo
-      uses: actions/checkout@v2.4.2
+      uses: actions/checkout@v2.4.2   # checks out your repository onto the runner
     
     # list files in repository
     - name: Check File System
@@ -100,3 +100,11 @@ jobs: # job to execute?
           Repository: ${{ github.repository }}
             
           See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}} 
+
+    # send message to whatsapp
+    - name: whatsapp-notify
+      uses: kaviadigdarshan/whatsapp-actions@main
+      env:
+        ACCOUNT_SID: ${{ secrets.ACCOUNT_SID }}
+        AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+        TO_WHATSAPP_NUMBER: ${{ secrets.TO_WHATSAPP_NUMBER }}
