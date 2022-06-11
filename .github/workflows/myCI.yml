@@ -40,7 +40,7 @@ jobs: # job to execute?
     # list files in repository
     - name: Check File System
       run: |
-        echo "The Operating System on the runner is $env:RUNNER_OS."
+        echo "The Operating System on the runner is $RUNNER_OS."
         ls
         
     # check-out a private repository
@@ -77,12 +77,12 @@ jobs: # job to execute?
         files: "tests.xml"
     
     # if previous step test fails, create an issue to github actor
-    - if:  ${{ failure() }}
+    - if:  ${{ failure() }}    # ${{*}} is optional for if condition, because github will evaluate as an expression with or without {{}}
       uses: nashmaniac/create-issue-action@v1.1
       name: Create Issue Action
       with:
         title: Build Failed
-        token: ${{secrets.GITHUB_TOKEN}}
+        token: ${{secrets.GITHUB_TOKEN}}    # workflow token
         assignees: ${{github.actor}}
         labels: worflow-failed
         body: Workflow failed for commit ${{github.sha}}
